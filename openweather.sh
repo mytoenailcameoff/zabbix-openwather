@@ -34,3 +34,12 @@ sed 's/,/\n/g' /tmp/openweather.current.api |grep temp |head -n 1 | awk -F ":" '
 
 #current temp feels like
 sed 's/,/\n/g' /tmp/openweather.current.api |grep feels_like | awk -F ":" '{print $2}' | xargs /usr/bin/zabbix_sender -v -z 127.0.0.1 -p 10051 -s Receiver01 -k  openweather.api.current.feels_like.temp -o 
+
+#pressure
+sed 's/,/\n/g' /tmp/openweather.current.api |grep pressure | awk -F ":" '{print $2}' | xargs /usr/bin/zabbix_sender -v -z 127.0.0.1 -p 10051 -s Receiver01 -k  openweather.api.current.pressure -o 
+
+#humidity
+sed 's/,/\n/g' /tmp/openweather.current.api |grep humidity | awk -F ":" '{print $2}' | awk -F "}" '{print $1}' | xargs /usr/bin/zabbix_sender -v -z 127.0.0.1 -p 10051 -s Receiver01 -k  openweather.api.current.humidity -o
+
+#wind speed
+sed 's/,/\n/g' /tmp/openweather.current.api |grep speed | awk -F ":" '{print $3}' | xargs /usr/bin/zabbix_sender -v -z 127.0.0.1 -p 10051 -s Receiver01 -k  openweather.api.current.wind.speed -o
