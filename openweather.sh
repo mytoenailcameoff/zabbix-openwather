@@ -4,6 +4,7 @@ curl "https://api.openweathermap.org/data/2.5/air_pollution?lat=39.9227&lon=-75.
 
 #pm2.5
 sed 's/,/\n/g' /tmp/openweather.api |grep pm2_5 | awk -F ":" '{print $2}' | xargs /usr/bin/zabbix_sender -v -z 127.0.0.1 -p 10051 -s Receiver01 -k openweather.api.pm25 -o
+timeout 30 curl -s https://website-api.airvisual.com/v1/cities/bbKzd2SzsYQM2wZTo | sed 's/,/\n/g' |grep -B 1 pollutantName | head -n 1 | awk -F':' '{print $2}' | xargs /usr/bin/zabbix_sender -v -z 127.0.0.1 -p 10051 -s Receiver01 -k openweather.api.pm25 -o
 
 #co
 sed 's/,/\n/g' /tmp/openweather.api |grep \"co\"  | awk -F ":" '{print $3}' | xargs /usr/bin/zabbix_sender -v -z 127.0.0.1 -p 10051 -s Receiver01 -k openweather.api.co -o
